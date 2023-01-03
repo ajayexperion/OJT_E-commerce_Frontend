@@ -7,12 +7,12 @@ import Home from "./Home";
 const UserRouter = () => {
     return (
         <div>
-            <Router>
+            {/* <Router> */}
                 <Routes>
                     <Route path='/' element={<Home />} />
                     <Route path='/contactus' element={<ContactUs />} />
                 </Routes>
-            </Router>
+            {/* </Router> */}
             {/* I am UserRouter */}
         </div>
     )

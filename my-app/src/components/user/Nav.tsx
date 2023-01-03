@@ -12,7 +12,7 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import Modal from '@mui/material/Modal';
 import { GoogleLogout } from 'react-google-login';
-import GoogleLogin from 'react-google-login';
+// import GoogleLogin from 'react-google-login';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import SearchIcon from '@mui/icons-material/Search';
 import ButtonGroup from '@mui/material/ButtonGroup';
@@ -23,10 +23,15 @@ import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import { useNavigate } from 'react-router-dom';
 
-const responseGoogle = (response: any) => {
-  console.log(response);
-}
+import { GoogleLogin } from '@react-oauth/google';//------------------
+
+import { GoogleOAuthProvider } from '@react-oauth/google';//----------
+
+import jwt_decode from "jwt-decode";//---------
+
+
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -45,11 +50,7 @@ const options = ['Create a merge commit', 'Squash and merge', 'Rebase and merge'
 const option = ['100-1000', '1000-5000', '5000-10000'];
 const Nav = () => {
 
-
-
-  const[filterStatus,setFilterStatus]=React.useState(false)
-
-// state for filter by name
+  // state for filter by name
 
   const [namefilter, setnamefilter] = React.useState(false);
   const anchorRef = React.useRef<HTMLDivElement>(null);
@@ -83,7 +84,7 @@ const Nav = () => {
   };
 
 
-// state for filter by amount
+  // state for filter by amount
   const [amountfilter, setamountfilter] = React.useState(false);
   const anchorTwoRef = React.useRef<HTMLDivElement>(null);
   const [selectedIndexTwo, setSelectedIndexTwo] = React.useState(1);
@@ -116,9 +117,6 @@ const Nav = () => {
   };
 
 
-
-
-
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -132,6 +130,10 @@ const Nav = () => {
 
   const handleClose = () => setOpen(false);
 
+  const navigate = useNavigate();
+  const test = () => {
+    navigate('/', { state: { "name": 'cycle1' } })
+  }
 
 
 
@@ -142,10 +144,8 @@ const Nav = () => {
         <Container maxWidth="xl" >
 
           <Toolbar disableGutters>
-            <IconButton  onClick={()=>{setFilterStatus(!filterStatus)}}>
-              <FilterAltIcon />
-            </IconButton>
-            <IconButton><SearchIcon /></IconButton>
+
+            {/* <IconButton><SearchIcon /></IconButton> */}
 
 
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}></Box>
@@ -198,13 +198,42 @@ const Nav = () => {
                   aria-describedby="modal-modal-description"
                 >
                   <Box sx={style}>
-                    <GoogleLogin
+                    {/* <GoogleLogin
                       clientId="431801254249-gejp2h2p8hv54ue28k7hk999laa0336h.apps.googleusercontent.com"
                       buttonText="LOGIN WITH GOOGLE"
                       onSuccess={responseGoogle}
                       onFailure={responseGoogle}
                       cookiePolicy={'single_host_origin'}
-                    />
+                    /> */}
+                    <GoogleOAuthProvider clientId="431801254249-gejp2h2p8hv54ue28k7hk999laa0336h.apps.googleusercontent.com">
+
+                      <GoogleLogin
+
+                        onSuccess={credentialResponse => {
+
+                          console.log(credentialResponse.credential);
+
+                          if (credentialResponse.credential !== undefined) {
+
+                            var decoded = jwt_decode(credentialResponse.credential);
+
+                            console.log(decoded);
+
+                          }
+
+                        }}
+
+                        onError={() => {
+
+                          console.log('Login Failed');
+
+                        }}
+
+                        useOneTap
+
+                      />
+
+                    </GoogleOAuthProvider>;
                   </Box>
                 </Modal>
 
@@ -217,8 +246,8 @@ const Nav = () => {
 
 
       {/* filter by name */}
-      {filterStatus &&<Container >
-      <React.Fragment >
+      <Container >
+
         {/* <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button" >
           <Button onClick={handleClick}>{options[selectedIndex]} </Button>
           <Button
@@ -270,19 +299,12 @@ const Nav = () => {
           )}
         </Popper> */}
 
-<Autocomplete
-      disablePortal
-      id="combo-box-demo"
-      options={options}
-      sx={{ width: 300 }}
-      
-      renderInput={(params) => <TextField {...params} label="Movie" />}
-    />
-      </React.Fragment>
 
-      {/* filter by amount */}
 
-      <React.Fragment>
+
+        {/* filter by amount */}
+
+        {/* <React.Fragment>
         <ButtonGroup variant="contained" ref={anchorTwoRef} aria-label="split button">
           <Button onClick={handleClickTwo}>{option[selectedIndexTwo]}</Button>
           <Button
@@ -333,8 +355,8 @@ const Nav = () => {
             </Grow>
           )}
         </Popper>
-      </React.Fragment>
-      </Container>}
+      </React.Fragment> */}
+      </Container>
     </>
   )
 }
