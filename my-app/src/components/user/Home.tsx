@@ -37,45 +37,39 @@ const Home = () => {
   const [selectedName, setSelected] = useState([]);
   const [minAmount, setMinAmount] = useState<number>(0);
   const [maxAmount, setMaxAmount] = useState<number>(0);
-  let[sortAmount,setSortAmount]=useState<number>(0)
+  let [sortAmount, setSortAmount] = useState<number>(0)
 
   console.log(selectedName)
   console.log(minAmount)
   console.log(sortAmount)
 
   const handleSort = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setSortAmount(sortAmount=1)
+    setSortAmount(sortAmount = 1)
   };
   const changeSort = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setSortAmount(sortAmount=-1)
+    setSortAmount(sortAmount = -1)
   };
-  const handleChange =(value:any)=>{
-    if(value != null){
+  const handleChange = (value: any) => {
+    if (value != null) {
       setSelected(value)
     }
-    else{
+    else {
       setSelected([])
     }
-   
+
   }
 
   useEffect(() => {
-    axios.get(`http://127.0.0.1:8000/reviews/product/?productName=${selectedName}&minAmount=${minAmount}&maxAmount=${maxAmount}&sortAmount=${sortAmount}` )
-      // headers: {
-      //   "productName": selectedName,
-      //   "minAmount": minAmount,
-      //   "maxAmount":maxAmount
+    axios.get(`http://127.0.0.1:8000/reviews/product/?productName=${selectedName}&minAmount=${minAmount}&maxAmount=${maxAmount}&sortAmount=${sortAmount}`)
 
-      // }
-    
       .then(res => {
         console.log(res.data)
         setProductList(res.data)
 
       })
-  }, [selectedName, maxAmount,minAmount,sortAmount])
+  }, [selectedName, maxAmount, minAmount, sortAmount])
 
-  
+
   return (
     <div>
       <Container>
@@ -96,12 +90,12 @@ const Home = () => {
             renderInput={(params) => <TextField {...params} label="Filter By Name" />}
 
           />
-         
+
           <TextField
             type="number"
             label="Min"
             value={minAmount}
-            
+
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => setMinAmount(Number(event.target.value))}
           />
           <TextField
@@ -114,11 +108,11 @@ const Home = () => {
 
           <Button>Apply Filter</Button>
         </Container>}
-        <IconButton onClick={() => { setSortStatus(!sortStatus) }}><SortIcon/></IconButton>
+        <IconButton onClick={() => { setSortStatus(!sortStatus) }}><SortIcon /></IconButton>
 
-        {sortStatus&&<Container>
-          <Button onClick={handleSort}>Min<CurrencyRupeeIcon/>-max<CurrencyRupeeIcon/></Button>OR
-          <Button onClick={changeSort} >Max<CurrencyRupeeIcon/>-min<CurrencyRupeeIcon/></Button>
+        {sortStatus && <Container>
+          <Button onClick={handleSort}>Min<CurrencyRupeeIcon />-max<CurrencyRupeeIcon /></Button>OR
+          <Button onClick={changeSort} >Max<CurrencyRupeeIcon />-min<CurrencyRupeeIcon /></Button>
         </Container>}
 
         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>

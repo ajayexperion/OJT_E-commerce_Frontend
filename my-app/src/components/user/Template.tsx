@@ -1,4 +1,4 @@
-import Nav from "./Nav";
+import Nav from "../header/Nav";
 import UserRouter from "./UserRouter";
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 

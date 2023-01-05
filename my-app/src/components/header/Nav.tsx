@@ -1,4 +1,4 @@
-import * as React from 'react';
+// import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -16,6 +16,8 @@ import { GoogleLogin } from '@react-oauth/google';//------------------
 import { GoogleOAuthProvider } from '@react-oauth/google';//----------
 import jwt_decode from "jwt-decode";//---------
 import { googleLogout } from "@react-oauth/google";
+import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom';
 
 
 const style = {
@@ -31,24 +33,39 @@ const style = {
   p: 4,
 };
 
-const options = ['Create a merge commit', 'Squash and merge', 'Rebase and merge'];
-const option = ['100-1000', '1000-5000', '5000-10000'];
+
 const Nav = () => {
 
+const [isLoggedIn, setIsLoggedIn] = useState(true);
+const loginHandler=(credentialResponse:any)=>{
+  console.log(credentialResponse.credential);
+
+  if (credentialResponse.credential !== undefined) {
+  setIsLoggedIn(true)
+
+  var decoded = jwt_decode(credentialResponse.credential);
+
+  console.log(decoded);}
 
 
- 
- 
+}
+
+
 
   const logoutHandler = () => {
 
     googleLogout();
+    setIsLoggedIn(false)
+    alert("Logout Succesful")
 
     console.log("Logout Succesful");
 
+   
+   
+
   };
 
-  
+
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -62,9 +79,19 @@ const Nav = () => {
 
   const handleClose = () => setOpen(false);
 
+
+
+
   const navigate = useNavigate();
-  const test = () => {
-    navigate('/', { state: { "name": 'cycle1' } })
+  const handleProfile = () => {
+
+    if (isLoggedIn) {
+
+    navigate('/ContactUs')
+    }
+    else{
+      handleOpen()
+    }
   }
 
 
@@ -112,7 +139,9 @@ const Nav = () => {
 
                 <Typography sx={{ width: 190 }}>
                   <MenuList dense>
-                    <Button onClick={handleCloseUserMenu} className="button" name="MY profile">MYprofile</Button>
+                  
+                    <Button onClick={handleProfile} className="button" name="MY profile">MYprofile</Button>
+                    
                     <br />
                     <Button onClick={handleCloseUserMenu}>WishLiSt</Button>
                     <br />
@@ -130,24 +159,25 @@ const Nav = () => {
                   aria-describedby="modal-modal-description"
                 >
                   <Box sx={style}>
-                  
+
                     <GoogleOAuthProvider clientId="171975728016-ihc9qjrf43s92g949p0s578ji9fvbft1.apps.googleusercontent.com">
 
                       <GoogleLogin
 
-                        onSuccess={credentialResponse => {
+                        onSuccess={loginHandler}
+                        // {credentialResponse => {
 
-                          console.log(credentialResponse.credential);
+                        //   console.log(credentialResponse.credential);
 
-                          if (credentialResponse.credential !== undefined) {
+                        //   if (credentialResponse.credential !== undefined) {
 
-                            var decoded = jwt_decode(credentialResponse.credential);
+                        //     var decoded = jwt_decode(credentialResponse.credential);
 
-                            console.log(decoded);
+                        //     console.log(decoded);
 
-                          }
+                        //   }
 
-                        }}
+                        // }}
 
                         onError={() => {
 
@@ -171,8 +201,8 @@ const Nav = () => {
       </AppBar>
 
 
-      
-     
+
+
     </>
   )
 }
