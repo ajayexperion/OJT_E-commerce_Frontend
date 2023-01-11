@@ -35,7 +35,7 @@ const style = {
 
 
 const Nav = () => {
-
+  const [profileImage,setProfileImage]=React.useState('');
 const [isLoggedIn, setIsLoggedIn] = useState(true);
 const loginHandler=(credentialResponse:any)=>{
   console.log(credentialResponse.credential);
@@ -43,9 +43,13 @@ const loginHandler=(credentialResponse:any)=>{
   if (credentialResponse.credential !== undefined) {
   setIsLoggedIn(true)
 
-  var decoded = jwt_decode(credentialResponse.credential);
+  var decoded:object = jwt_decode(credentialResponse.credential);
 
-  console.log(decoded);}
+  console.log(decoded);
+  var i=Object.values(decoded);
+
+  setProfileImage(i[8]);
+}
 
 
 }
@@ -112,7 +116,7 @@ const loginHandler=(credentialResponse:any)=>{
 
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 1 }}>
-                  <Avatar src="https://lh3.googleusercontent.com/a/AEdFTp4pmObIi5_u9Vm7VIhY8jifXpO7KYION9M9esZm=s96-c" sx={{ bgcolor: green[500] }} />
+                  <Avatar src={profileImage} sx={{ bgcolor: green[500] }} />
 
                 </IconButton>
               </Tooltip>

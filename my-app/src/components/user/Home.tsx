@@ -63,8 +63,9 @@ const Home = () => {
     axios.get(`http://127.0.0.1:8000/reviews/product/?productName=${selectedName}&minAmount=${minAmount}&maxAmount=${maxAmount}&sortAmount=${sortAmount}`)
 
       .then(res => {
-        console.log(res.data)
-        setProductList(res.data)
+      
+        
+        setProductList(res.data.data)
 
       })
   }, [selectedName, maxAmount, minAmount, sortAmount])
